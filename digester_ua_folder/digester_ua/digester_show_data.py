@@ -19,3 +19,4 @@ def showdata(request):
     #start extracting
     res = extract_data_to_html(links, last_out_string)
     return HttpResponse(res)
+#writing this string - this string should init github sync
