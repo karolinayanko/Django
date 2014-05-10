@@ -1,7 +1,7 @@
 #tr.anidub.com module
 import urllib, re, os, sys, webbrowser, datetime, time
 from lxml import etree
-extract_data = __import__('digester_ua.mods.grabber')
+extract_data = __import__('digester_ua.mods.grabber', fromlist = ['grab_info'])
 #expressions for data gathering and handling
 xpathes = {
     'name':'''(//td[@class='colhead'])[1]//a/b/text()''',

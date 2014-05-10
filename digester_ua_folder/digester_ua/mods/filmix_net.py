@@ -1,7 +1,7 @@
 #filmix.net module
 import urllib, re, os, sys, webbrowser, datetime, time
 from lxml import etree
-extract_data = __import__('grabber')
+extract_data = __import__('digester_ua.mods.grabber', fromlist = ['grab_info'])
 #expressions for data gathering and handling
 xpathes = {
     'name':'''(//div[@id='dle-content']//div[@class='block']//h2)[1]//a//text()''',

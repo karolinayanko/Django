@@ -1,6 +1,6 @@
 import urllib, urllib2, cookielib, re, os, sys, webbrowser, datetime, time, calendar
 from lxml import etree
-extract_data = __import__('grabber')
+extract_data = __import__('digester_ua.mods.grabber', fromlist = ['grab_info'])
 #expressions for data gathering and handling
 xpathes = {
     'name':'''(//tr[contains(@class,'tCenter')]//td[contains(@class,'t-title')]//div/a)[1]//text()''',
@@ -55,11 +55,16 @@ def gather_info(url, last_out_string):
     #encoding name:
     encoded_name=''
     try:
-        result.append(last_out.encode('cp866'))
-        encoded_name = last_out.encode('cp866')
-    except:
-        result.append(str(last_out.encode('raw_unicode_escape')).decode('Windows-1251').encode('cp866', 'ignore'))
-        encoded_name = str(last_out.encode('raw_unicode_escape')).decode('Windows-1251').encode('cp866', 'ignore')
+        if '\\u' in str(last_out.encode('raw_unicode_escape')).decode('Windows-1251').encode('utf-8'):
+            result.append(last_out.encode('utf-8'))
+            encoded_name = last_out.encode('utf-8')
+        else:
+            result.append(str(last_out.encode('raw_unicode_escape')).decode('Windows-1251').encode('utf-8'))#.encode('utf-8')
+            encoded_name = str(last_out.encode('raw_unicode_escape')).decode('Windows-1251').encode('utf-8')#.encode('utf-8')
+    except Exception as ex:
+        return ex + "in grabber.py module"
+        # result.append(str(last_out.encode('raw_unicode_escape')).decode('Windows-1251').encode('cp866', 'ignore'))
+        # encoded_name = str(last_out.encode('raw_unicode_escape')).decode('Windows-1251').encode('cp866', 'ignore')
     #extracting time and flag - new anime added or old
     last_out_date = ''.join(tree.xpath(xpathes['date']))
     from date_processor import date_processor
@@ -91,7 +96,7 @@ def gather_info(url, last_out_string):
     # last_out_dateflag += str(" - added yesterday" if str(yesterday) in str(last_out_date) or str(yesterday.strftime('%d-%Y')) in last_out_date else "")
     last_out_dateflag += str(" - added yesterday" if str(yesterday) in str(last_out_date) or str(yesterday_nomonth) in last_out_date else "")
     #if we haven't exactly this title's text -> series was changed -> add to flag
-    if not(encoded_name+'\r\n') in str(last_out_string.encode('cp866', 'ignore')):
+    if not(encoded_name+'\r\n') in str(last_out_string.encode('utf-8')):
         last_out_dateflag+='; new series!'
     result.append(last_out_dateflag)
     last_out_image = ''.join(tree.xpath(xpathes.get('image', 'noimage')))

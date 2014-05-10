@@ -1,3 +1,4 @@
+#-*-coding:utf-8-*-
 # Create your views here.
 import os, codecs, time
 MODULE_ROOT = os.path.normpath(os.path.dirname(__file__))
@@ -13,7 +14,7 @@ def showdata(request):
     f.close()
     #contains data with previous latest extracted series
     last_out_string = ''
-    with codecs.open(temp_file_name, encoding = 'cp866') as los:
+    with codecs.open(temp_file_name) as los:
         for item in los:
             last_out_string+=item
     #start extracting

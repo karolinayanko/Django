@@ -1,7 +1,7 @@
 #lostfilm.tv module
 import urllib, re, os, sys, webbrowser, datetime, time
 from lxml import etree
-extract_data = __import__('grabber')
+extract_data = __import__('digester_ua.mods.grabber', fromlist = ['grab_info'])
 #expressions for data gathering and handling
 xpathes = {
     'name':'''((//div[@class='mid']/div/h1/text())[1]|//*[*/tr/td//div[@id='TitleDiv1']]//tr/td//span[@class='micro']/span[2]/text())''',

@@ -1,7 +1,7 @@
 #anime-tracker.ru module
 import urllib, re, os, sys, webbrowser, datetime, time
 from lxml import etree
-extract_data = __import__('grabber')
+extract_data = __import__('digester_ua.mods.grabber', fromlist = ['grab_info'])
 xpathes = {
     'name':'''(//div[@class='strTitle'])[1]//text()''',
     'name_regexp':[{'regexp':r'^\s+(.*)', 'group':r'\1'}],

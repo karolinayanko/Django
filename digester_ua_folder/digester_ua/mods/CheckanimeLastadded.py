@@ -215,7 +215,8 @@ MODULE_ROOT = os.path.normpath(os.path.dirname(__file__))
 def extract_data_to_html(links, last_out_string):
     count = 0
     new_series_added=False
-    series_string=''
+    series_string = ''
+    result_string='<html><head><meta http-equiv="Content-Type" content="text/html; charset=Windows-1251"></head><body><h3>Daily Anime Digest '+str(datetime.date.today())+'</h3><hr><table cellpadding="4" cellspacing="2" border="0">'
     last_out_link = []
     for url in links:
         url = url.replace('\n','')
@@ -223,27 +224,25 @@ def extract_data_to_html(links, last_out_string):
         #calling gather_info
         try:
             if 'anidub' in url:
-                module = __import__('digester_ua.mods.anidub.gather_info')
-                return module.__file__#dir(module)
+                module = __import__('digester_ua.mods.anidub', fromlist = ['gather_info'])
                 result = module.gather_info(url, last_out_string)
-                # return result
             elif 'rutracker' in url:
-                module = __import__('rutracker_org')
+                module = __import__('digester_ua.mods.rutracker_org', fromlist = ['gather_info'])
                 result = module.gather_info(url, last_out_string)
             elif 'animedia' in url:
-                module = __import__('animedia')
+                module = __import__('digester_ua.mods.animedia', fromlist = ['gather_info'])
                 result = module.gather_info(url, last_out_string)
             elif 'ex.ua' in url:
-                module = __import__('ex_ua')
+                module = __import__('digester_ua.mods.ex_ua', fromlist = ['gather_info'])
                 result = module.gather_info(url, last_out_string)
             elif 'lostfilm' in url:
-                module = __import__('lostfilm')
+                module = __import__('digester_ua.mods.lostfilm', fromlist = ['gather_info'])
                 result = module.gather_info(url, last_out_string)
             elif 'anime-tracker.ru' in url:
-                module = __import__('animetracker_ru')
+                module = __import__('digester_ua.mods.animetracker_ru', fromlist = ['gather_info'])
                 result = module.gather_info(url, last_out_string)
             elif 'filmix.net' in url:
-                module = __import__('filmix_net')
+                module = __import__('digester_ua.mods.filmix_net', fromlist = ['gather_info'])
                 result = module.gather_info(url, last_out_string)
             # else:
                 # module = __import__('universal')
@@ -265,17 +264,28 @@ def extract_data_to_html(links, last_out_string):
         anime_info = re.sub(r'\s+',r' ',str(result[0]).replace(' - ','-').replace('- ','-').replace(' -','-'))
         #collecting new extracted names data
         series_string+=result[0]+'\n'
+        ###########image url check and update#################
+        image_url = str(result[2])
+        #if img_url is cutted - "/something/etc.jpg", we'll gather this url: http://+domain+url
+        if image_url.startswith('/'):
+            image_url = str('http://'+re.sub(r'.*?\/\/(.*?)\/.*',r'\1',str(url))+image_url)
+        #else we'll try(!) to replace in "./something/etc.jpg" the "./" part to http://+domain+/
+        else:
+            image_url = image_url.replace('./',str('http://'+re.sub(r'.*?\/\/(.*?)\/.*',r'\1',str(url))+'/'))
+        # result_string+=result[0]+' '+result[1]+'<br>'+result[2]+'<br>'+result[3]+'<br><br>'
         #move flag to True, if at least 1 anime has a new series
         if 'new series' in str(result[1]):
             new_series_added=True
         is_new_flag = str(result[1])
         last_out_link.append(result[3])
+        result_string+=str('<tr><td><img src="'+image_url+'" align="left" height="95" width="75"></img></td><td>'+domain+' '+is_new_flag+'<br><b>'+anime_info+'</b><br><a href="'+result[3]+'" target="_blank">Download</a></td></tr>')
         count += 1
+    result_string += '</table></html></body>'
     #write to file if we have changes in new series
     if new_series_added:
-        with open('temp.tmp', 'w') as file:
+        with open(os.path.join(MODULE_ROOT, 'temp.tmp'), 'w') as file:
             file.write(series_string)
-    return series_string
+    return result_string
     
 def test(links, last_out_string):
     return last_out_string
