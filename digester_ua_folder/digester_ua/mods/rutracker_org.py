@@ -20,6 +20,7 @@ def gather_info_orig(url, last_out_string):
 def gather_info(url, last_out_string):
     #holds data to return
     result = []
+    res = {'name':'', 'dateflag':'', 'image':'', 'url':''}
     ###POST request###
     #http://rutracker.org/forum/tracker.php?nm={key}
     #http://login.rutracker.org/forum/login.php?redirect=/forum/tracker.php?nm={key}
@@ -57,9 +58,11 @@ def gather_info(url, last_out_string):
     try:
         if '\\u' in str(last_out.encode('raw_unicode_escape')).decode('Windows-1251').encode('utf-8'):
             result.append(last_out.encode('utf-8'))
+            res['name']=last_out.encode('utf-8')
             encoded_name = last_out.encode('utf-8')
         else:
             result.append(str(last_out.encode('raw_unicode_escape')).decode('Windows-1251').encode('utf-8'))#.encode('utf-8')
+            res['name']=str(last_out.encode('raw_unicode_escape')).decode('Windows-1251').encode('utf-8')
             encoded_name = str(last_out.encode('raw_unicode_escape')).decode('Windows-1251').encode('utf-8')#.encode('utf-8')
     except Exception as ex:
         return ex + "in grabber.py module"
@@ -99,6 +102,7 @@ def gather_info(url, last_out_string):
     if not(encoded_name+'\r\n') in str(last_out_string.encode('utf-8')):
         last_out_dateflag+='; new series!'
     result.append(last_out_dateflag)
+    res['dateflag']=last_out_dateflag
     last_out_image = ''.join(tree.xpath(xpathes.get('image', 'noimage')))
     if not(last_out_image):
         last_out_image = 'https://www.google.com/images/srpr/logo11w.png'
@@ -110,6 +114,7 @@ def gather_info(url, last_out_string):
             if regexp.get('regexp') != '' and regexp.get('group'):
                 last_out_image = re.sub(regexp.get('regexp'), regexp.get('group'), last_out_image)
     result.append(last_out_image)
+    res['image']=last_out_image
     last_out_url = ''.join(tree.xpath(xpathes['url']))
     #applying regexps if any
     if xpathes.get('url_regexp'):
@@ -121,9 +126,11 @@ def gather_info(url, last_out_string):
     if re.sub(r'.*?\/\/(.*?)\/.*',r'\1',url) in last_out_url:
         # and contains(.,'720p')
         result.append(last_out_url)
+        res['url']=last_out_url
     else:
         #url don't have domain - gathering full url: http:// + domain + orig. url -> // to / -> http:/ to http://
         result.append(str("http://"+re.sub(r'.*?\/\/(.*?\/).*',r'\1',url)+last_out_url).replace('//','/').replace('http:/','http://'))#.replace('/./','/'))
-    return result
+        res['url']=str("http://"+re.sub(r'.*?\/\/(.*?\/).*',r'\1',url)+last_out_url).replace('//','/').replace('http:/','http://')
+    return res
 
 # print gather_info('http://rutracker.org/forum/tracker.php?nm=gurren+lagann', 'abcd')

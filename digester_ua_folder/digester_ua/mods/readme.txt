@@ -29,6 +29,7 @@ DEVLOG
 07.11.13: added date_processor import to grabber.py and rutracker.py
 08.11.13: improved date_processor - if we have a day "1" and not "01" - adding zero to it (2013-11-8 -> 2013-11-08); updated some regexes due to it; removed adding zero to last_out_date in rutracker
 @todo4: make one call in result = module.gather_info(url, last_out_string), not in each if-else condition; add import "reload" to be able to update modules in-real-time
+15.05.14: updated to dict with crawled data in grabber.py and CheckanimeLastadded.py, rutracker_org.py
 
 files:
 anime_url - contains urls to crawl;
@@ -55,6 +56,7 @@ Theoretically, should work in others open-info sites
 
 Programmers memo:
 gather_info returns a list: ['name', 'is_new_flag', 'img_url', 'link to download']
+NEW! returns a dict: res = {'name':'', 'dateflag':'', 'image':'', 'url':''}
 
 sitedef xpathes structure:
 xpathes = {

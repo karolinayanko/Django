@@ -3,7 +3,7 @@
 import os, codecs, time
 MODULE_ROOT = os.path.normpath(os.path.dirname(__file__))
 from django.http import HttpResponse, HttpResponseNotFound
-from mods.CheckanimeLastadded import extract_data_to_html, test
+from mods.CheckanimeLastadded import extract_data_to_html#, test
 def showdata(request):
     #opening files -> reading -> clearing data
     anime_file_name = os.path.join(MODULE_ROOT, 'mods', 'anime_url.txt')

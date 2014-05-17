@@ -5,6 +5,7 @@ from lxml import etree
 def grab_info(url, xpathes, last_out_string):
     #holds data to return
     result = []
+    res = {'name':'', 'dateflag':'', 'image':'', 'url':''}
     # page = urllib.urlopen(str(url))
     #improved: make sure that anti-bot will not ban Python. Never.
     req = urllib2.Request(url, headers={'User-Agent' : "Magic Browser"})
@@ -26,9 +27,11 @@ def grab_info(url, xpathes, last_out_string):
     try:
         if '\\u' in str(last_out.encode('raw_unicode_escape')).decode('Windows-1251').encode('utf-8'):
             result.append(last_out.encode('utf-8'))
+            res['name']=last_out.encode('utf-8')
             encoded_name = last_out.encode('utf-8')
         else:
             result.append(str(last_out.encode('raw_unicode_escape')).decode('Windows-1251').encode('utf-8'))#.encode('utf-8')
+            res['name']=str(last_out.encode('raw_unicode_escape')).decode('Windows-1251').encode('utf-8')
             encoded_name = str(last_out.encode('raw_unicode_escape')).decode('Windows-1251').encode('utf-8')#.encode('utf-8')
     except Exception as ex:
         return ex + "in grabber.py module"
@@ -68,6 +71,7 @@ def grab_info(url, xpathes, last_out_string):
     if not(encoded_name+'\r\n') in str(last_out_string):#.encode('utf-8')
         last_out_dateflag+='; new series!'
     result.append(last_out_dateflag)
+    res['dateflag']=last_out_dateflag
     last_out_image = ''.join(tree.xpath(xpathes.get('image', 'noimage')))
     # if last_out_image and not(re.sub(r'.*?\/\/(.*?)\/.*',r'\1',str(url))) in last_out_image:
         # last_out_image = re.sub(r'^\.\/',r'/',last_out_image)
@@ -82,6 +86,7 @@ def grab_info(url, xpathes, last_out_string):
             if regexp.get('regexp') != '' and regexp.get('group'):
                 last_out_image = re.sub(regexp.get('regexp'), regexp.get('group'), last_out_image)
     result.append(last_out_image)
+    res['image']=last_out_image
     last_out_url = ''.join(tree.xpath(xpathes['url']))
     #applying regexps if any
     if xpathes.get('url_regexp'):
@@ -93,10 +98,12 @@ def grab_info(url, xpathes, last_out_string):
     if re.sub(r'.*?\/\/(.*?)\/.*',r'\1',url) in last_out_url:#??? maybe need to remove # in last_out # from condition???
         # and contains(.,'720p')
         result.append(last_out_url)
+        res['url']=last_out_url
     else:
         #url don't have domain - gathering full url: http:// + domain + orig. url -> // to / -> http:/ to http://
         result.append(str("http://"+re.sub(r'.*?\/\/(.*?\/).*',r'\1',url)+last_out_url).replace('//','/').replace('http:/','http://'))
-    return result
+        res['url']=str("http://"+re.sub(r'.*?\/\/(.*?\/).*',r'\1',url)+last_out_url).replace('//','/').replace('http:/','http://')
+    return res
 #################################################################################################################
 def grab_info_v0(url, xpathes, last_out_string):
     #holds data to return

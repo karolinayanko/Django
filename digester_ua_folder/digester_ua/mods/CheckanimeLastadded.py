@@ -216,11 +216,12 @@ def extract_data_to_html(links, last_out_string):
     count = 0
     new_series_added=False
     series_string = ''
-    result_string='<html><head><meta http-equiv="Content-Type" content="text/html; charset=Windows-1251"></head><body><h3>Daily Anime Digest '+str(datetime.date.today())+'</h3><hr><table cellpadding="4" cellspacing="2" border="0">'
+    result_string='<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body><h3>Daily Anime Digest '+str(datetime.date.today())+'</h3><hr><table cellpadding="4" cellspacing="2" border="0">'
     last_out_link = []
     for url in links:
         url = url.replace('\n','')
-        result = []
+        #result = []
+        result = {}
         #calling gather_info
         try:
             if 'anidub' in url:
@@ -261,11 +262,14 @@ def extract_data_to_html(links, last_out_string):
             # anime_info = re.sub(r'(.*?)\s\/.*?(\d+.*?)(:|\s|\]).*',r'\1 : \2',str(result[0]+":").replace(' - ','-').replace('- ','-').replace(' -','-'))
             # anime_info = re.sub(r'(.*):$',r'\1',anime_info)
         # else:
-        anime_info = re.sub(r'\s+',r' ',str(result[0]).replace(' - ','-').replace('- ','-').replace(' -','-'))
+        #anime_info = re.sub(r'\s+',r' ',str(result[0]).replace(' - ','-').replace('- ','-').replace(' -','-'))
+        anime_info = re.sub(r'\s+',r' ',str(result.get('name')).replace(' - ','-').replace('- ','-').replace(' -','-'))
         #collecting new extracted names data
-        series_string+=result[0]+'\n'
+        #series_string+=result[0]+'\n'
+        series_string+=result.get('name')+'\n'
         ###########image url check and update#################
-        image_url = str(result[2])
+        #image_url = str(result[2])
+        image_url = str(result.get('image'))
         #if img_url is cutted - "/something/etc.jpg", we'll gather this url: http://+domain+url
         if image_url.startswith('/'):
             image_url = str('http://'+re.sub(r'.*?\/\/(.*?)\/.*',r'\1',str(url))+image_url)
@@ -274,11 +278,15 @@ def extract_data_to_html(links, last_out_string):
             image_url = image_url.replace('./',str('http://'+re.sub(r'.*?\/\/(.*?)\/.*',r'\1',str(url))+'/'))
         # result_string+=result[0]+' '+result[1]+'<br>'+result[2]+'<br>'+result[3]+'<br><br>'
         #move flag to True, if at least 1 anime has a new series
-        if 'new series' in str(result[1]):
+        #
+        if 'new series' in str(result.get('dateflag')):
             new_series_added=True
-        is_new_flag = str(result[1])
-        last_out_link.append(result[3])
-        result_string+=str('<tr><td><img src="'+image_url+'" align="left" height="95" width="75"></img></td><td>'+domain+' '+is_new_flag+'<br><b>'+anime_info+'</b><br><a href="'+result[3]+'" target="_blank">Download</a></td></tr>')
+        #is_new_flag = str(result[1])
+        is_new_flag = str(result.get('dateflag'))
+        #last_out_link.append(result[3])
+        last_out_link.append(result.get('url'))
+        #result_string+=str('<tr><td><img src="'+image_url+'" align="left" height="95" width="75"></img></td><td>'+domain+' '+is_new_flag+'<br><b>'+anime_info+'</b><br><a href="'+result[3]+'" target="_blank">Download</a></td></tr>')
+        result_string+=str('<tr><td><img src="'+image_url+'" align="left" height="95" width="75"></img></td><td>'+domain+' '+is_new_flag+'<br><b>'+anime_info+'</b><br><a href="'+result.get('url')+'" target="_blank">Download</a></td></tr>')
         count += 1
     result_string += '</table></html></body>'
     #write to file if we have changes in new series

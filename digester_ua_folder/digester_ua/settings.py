@@ -1,5 +1,5 @@
 # Django settings for digester_ua project.
-
+import os
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -108,6 +108,8 @@ ROOT_URLCONF = 'digester_ua.urls'
 WSGI_APPLICATION = 'digester_ua.wsgi.application'
 
 TEMPLATE_DIRS = (
+    #'D:\\Python\\Django\\digester_ua_folder',
+    os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/'),
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
