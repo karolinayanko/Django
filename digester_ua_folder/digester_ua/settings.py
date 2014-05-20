@@ -115,6 +115,16 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 )
 
+ACCOUNT_ACTIVATION_DAYS = 2
+
+AUTH_USER_EMAIL_UNIQUE = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'animedigest@gmail.com'
+EMAIL_HOST_PASSWORD = 'konataizumi'
+DEFAULT_FROM_EMAIL = 'animedigest@gmail.com'
+EMAIL_USE_TLS = True
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -128,6 +138,8 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     #'polls',
     'digester_ua',
+    'registration',
+    'account',
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'

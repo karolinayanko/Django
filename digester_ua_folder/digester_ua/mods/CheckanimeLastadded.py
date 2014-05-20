@@ -216,7 +216,7 @@ def extract_data_to_html(links, last_out_string):
     count = 0
     new_series_added=False
     series_string = ''
-    result_string='<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body><h3>Daily Anime Digest '+str(datetime.date.today())+'</h3><hr><table cellpadding="4" cellspacing="2" border="0">'
+    result_string='<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head><body><h3>Daily Anime Digest '+str(datetime.date.today())+'</h3><hr><table cellpadding="4" cellspacing="2" border="0">'
     last_out_link = []
     for url in links:
         url = url.replace('\n','')

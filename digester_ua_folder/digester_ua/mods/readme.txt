@@ -29,6 +29,7 @@ DEVLOG
 07.11.13: added date_processor import to grabber.py and rutracker.py
 08.11.13: improved date_processor - if we have a day "1" and not "01" - adding zero to it (2013-11-8 -> 2013-11-08); updated some regexes due to it; removed adding zero to last_out_date in rutracker
 @todo4: make one call in result = module.gather_info(url, last_out_string), not in each if-else condition; add import "reload" to be able to update modules in-real-time
+12.05.14: added Magic Brovser to aviod antibot
 15.05.14: updated to dict with crawled data in grabber.py and CheckanimeLastadded.py, rutracker_org.py
 
 files:

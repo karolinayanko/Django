@@ -3,26 +3,14 @@ import urllib, re, os, sys, webbrowser, datetime, time
 from lxml import etree
 extract_data = __import__('digester_ua.mods.grabber', fromlist = ['grab_info'])
 #expressions for data gathering and handling
-# xpathes = {
-    # 'name':'''(//td[@class='colhead'])[1]//a/b/text()''',
-    # 'name_regexp':[{'regexp':r'(.*?\[.*?\]).*', 'group':r'\1'}],
-    # 'date':'''(//td[@class='colhead'])[1]//a[@class='altlink_white']/text()''',
-    # 'date_regexp':[{'regexp':r'(.*?)\s.*', 'group':r'\1'},{'regexp':r'(.*)', 'group':r'\1'}],
-    # 'image':'''(//table[@class='main']//tr/td[@align='center']/a[img]/img/@src)[1]''',
-    # 'image_regexp':[{'regexp':r'', 'group':r''}],
-    # 'url':'''(//td[@class='colhead'])[1]//a[b]/@href''',
-    # 'url_regexp':[{'regexp':r'', 'group':r''}],
-# }
-#new site wrap
-#http://tr.anidub.com/index.php?do=search&story=Naruto&subaction=search
 xpathes = {
-    'name':'''(//div[@class="search_post"])[1]//h2//a//text()''',
+    'name':'''(//td[@class='colhead'])[1]//a/b/text()''',
     'name_regexp':[{'regexp':r'(.*?\[.*?\]).*', 'group':r'\1'}],
     'date':'''(//td[@class='colhead'])[1]//a[@class='altlink_white']/text()''',
     'date_regexp':[{'regexp':r'(.*?)\s.*', 'group':r'\1'},{'regexp':r'(.*)', 'group':r'\1'}],
-    'image':'''((//div[@class="search_post"])[1]//div[contains(@class,'poster')]//img/@src)[1]''',
+    'image':'''(//table[@class='main']//tr/td[@align='center']/a[img]/img/@src)[1]''',
     'image_regexp':[{'regexp':r'', 'group':r''}],
-    'url':'''(//div[@class="search_post"])[1]//h2//a/@href''',
+    'url':'''(//td[@class='colhead'])[1]//a[b]/@href''',
     'url_regexp':[{'regexp':r'', 'group':r''}],
 }
 #extraction goes here

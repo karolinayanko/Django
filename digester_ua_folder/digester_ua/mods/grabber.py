@@ -1,6 +1,7 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 import urllib, urllib2, re, os, sys, webbrowser, datetime, time, calendar
 from lxml import etree
+ALLOW_SYMBOLS = "Н"
 #latest def w/ encoding
 def grab_info(url, xpathes, last_out_string):
     #holds data to return
@@ -24,15 +25,28 @@ def grab_info(url, xpathes, last_out_string):
                 last_out = re.sub(regexp.get('regexp'), regexp.get('group'), last_out)
     #encoding name:
     encoded_name=''
+    test_name = ''
     try:
-        if '\\u' in str(last_out.encode('raw_unicode_escape')).decode('Windows-1251').encode('utf-8'):
-            result.append(last_out.encode('utf-8'))
-            res['name']=last_out.encode('utf-8')
-            encoded_name = last_out.encode('utf-8')
-        else:
-            result.append(str(last_out.encode('raw_unicode_escape')).decode('Windows-1251').encode('utf-8'))#.encode('utf-8')
+        try:
+            test_name = unicode(last_out).encode('raw_unicode_escape')
+            for literal in ALLOW_SYMBOLS:
+                if literal in test_name:
+                    res['name']=test_name# + " unicodetoutf"
+                    encoded_name = unicode(last_out).encode('raw_unicode_escape')
+                    break
+            if not(res['name']):
+                if '\\u' in str(last_out.encode('raw_unicode_escape')).decode('Windows-1251').encode('utf-8'):
+                    result.append(last_out.encode('utf-8'))
+                    res['name']=last_out.encode('utf-8')# + " utf"
+                    encoded_name = last_out.encode('utf-8')
+                else:
+                    result.append(str(last_out.encode('raw_unicode_escape')).decode('Windows-1251').encode('utf-8'))#.encode('utf-8')
+                    res['name']=str(last_out.encode('raw_unicode_escape')).decode('Windows-1251').encode('utf-8')# + " third"
+                    encoded_name = str(last_out.encode('raw_unicode_escape')).decode('Windows-1251').encode('utf-8')#.encode('utf-8')
+        except Exception as ex:
+            result.append(str(last_out.encode('raw_unicode_escape')).decode('Windows-1251').encode('utf-8'))
             res['name']=str(last_out.encode('raw_unicode_escape')).decode('Windows-1251').encode('utf-8')
-            encoded_name = str(last_out.encode('raw_unicode_escape')).decode('Windows-1251').encode('utf-8')#.encode('utf-8')
+            encoded_name = str(last_out.encode('raw_unicode_escape')).decode('Windows-1251').encode('utf-8')
     except Exception as ex:
         return ex + "in grabber.py module"
         # result.append(str(last_out.encode('raw_unicode_escape')).decode('Windows-1251').encode('cp866', 'ignore'))

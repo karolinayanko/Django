@@ -29,5 +29,5 @@ def test_two(request):
     # html = t.render(Context({'content': '123'}))
     # res = '<h2>test res</h2>'
     ht = Template('{% extends "index.html" %}{% block content %}'+res+'{% endblock %}')
-    html = ht.render(Context({'content': ''}))
+    html = ht.render(Context({'content': res}))
     return HttpResponse(html)
