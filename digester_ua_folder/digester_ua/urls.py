@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib import admin
 admin.autodiscover()
 from registration import views as registration_views
+from digester_ua import views as digester_ua_views
 
 urlpatterns = patterns('',
     # Examples:
@@ -12,6 +13,7 @@ urlpatterns = patterns('',
     url(r'^test/', 'digester_ua.views.test', name='test'),
     url(r'^test_2/', 'digester_ua.test2.test_two', name='test_two'),
     url(r'^show_data_test/', 'digester_ua.digester_show_data.showdata', name='showdata'),
+    url(r'^Profile_data/', digester_ua_views.Profile_data.as_view()),
     url(r'^register/$', registration_views.Register.as_view()),
     (r'^account/', include('account.urls')),
     # url(r'^digester_ua/', include('digester_ua.foo.urls')),

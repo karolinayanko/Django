@@ -1,0 +1,12 @@
+{% extends "account/profile.html" %}
+{% block data_content %}
+    <div>
+        {% for number, data in all_data.items %}
+            {% for item in data %}
+                {{item}}
+                </br>
+            {% endfor %}
+            </br>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -6,6 +6,7 @@ from django.http import HttpResponse, HttpResponseNotFound
 from mods.CheckanimeLastadded import extract_data_to_html
 from django.template.loader import get_template
 from django.template import Template, Context
+from django.contrib.auth.models import User
 import datetime
 def test_two(request):
     #res = '<h1>Page was found</h1>'

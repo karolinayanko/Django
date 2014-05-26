@@ -16,12 +16,12 @@ from account.forms import EmailForm
 
 class Profile(View):
 
-    @render_to("account/profile.jinja")
+    @render_to("account/profile.html")
     def get(self, request):
         form = EmailForm()
         return {'form': form}
 
-    @render_to("account/profile.jinja")
+    @render_to("account/profile.html")
     def post(self, request):
         form = EmailForm(request.POST.copy())
         user = request.user
@@ -36,7 +36,7 @@ class Profile(View):
 
 class Login(View):
 
-    @render_to("account/login.jinja")
+    @render_to("account/login.html")
     def get(self, request):
         if request.user.is_authenticated():
             return {"redirect": "/account/profile/"}
@@ -44,7 +44,7 @@ class Login(View):
         form = LoginForm()
         return {'form': form}
 
-    @render_to("account/login.jinja")
+    @render_to("account/login.html")
     def post(self, request):
         form = LoginForm(request.POST.copy())
 
@@ -69,13 +69,13 @@ class Logout(View):
 
 class Passchange(View):
 
-    @render_to("account/password_change.jinja")
+    @render_to("account/password_change.html")
     def get(self, request):
         if request.user.is_authenticated():
             form = ChangePasswordForm()
             return {'form': form}
 
-    @render_to("account/password_change.jinja")
+    @render_to("account/password_change.html")
     def post(self, request):
         user = request.user
         form = ChangePasswordForm(user, request.POST)
@@ -90,7 +90,7 @@ class Passchange(View):
 
 class Recover(View):
 
-    @render_to("account/recover_pass.jinja")
+    @render_to("account/recover_pass.html")
     def get(self, request):
         form = PasswordResetForm()
         return {'form': form}

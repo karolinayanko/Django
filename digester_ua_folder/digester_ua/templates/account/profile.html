@@ -1,0 +1,20 @@
+{% extends "index.html" %}
+{% block content %}
+    <div>
+        Привет, {{ request.user }}.
+    </div>
+    <a href="/Profile_data/">Profile_data</a>
+    {% block data_content %}
+    {% endblock %}
+    <form action='.' method='post'>
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    {% if request.user.email %}
+        you already registered your email
+    {% else %}
+        {{ form }}
+        <input type="submit" value="e-mail" />
+    {% endif %}
+        <input type="hidden" name="next" value="{{ next|escape }}" />
+    </form>
+    
+{% endblock %}
